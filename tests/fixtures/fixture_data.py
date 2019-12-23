@@ -40,7 +40,7 @@ def negative_calories_remained():
 @pytest.fixture
 def positive_calories_remained():
     def _positive_calories_remained(limit):
-        return f'Сегодня можно съесть что-нибудь ещё, но c общей калорийностью не более {limit} кКал'
+        return f'Сегодня можно съесть что-нибудь ещё, но с общей калорийностью не более {limit} кКал'
     return _positive_calories_remained
 
 
