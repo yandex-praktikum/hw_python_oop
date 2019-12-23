@@ -40,7 +40,7 @@ def negative_calories_remained():
 @pytest.fixture
 def positive_calories_remained():
     def _positive_calories_remained(limit):
-        return f'Сегодня можно съесть что-нибудь ещё, но общей калорийностью не более {limit} кКал.'
+        return f'Сегодня можно съесть что-нибудь ещё, но c общей калорийностью не более {limit} кКал'
     return _positive_calories_remained
 
 
@@ -48,10 +48,10 @@ def positive_calories_remained():
 def today_cash_remained():
 
     def _today_positively(currency):
-        return f'На сегодня осталось {remained_dict[currency]} {currency_dict[currency]}.'
+        return f'На сегодня осталось {remained_dict[currency]} {currency_dict[currency]}'
 
     def _today_negatively(currency):
-        return f'Денег нет, держись: твой долг - {remained_dict[currency]} {currency_dict[currency]}.'
+        return f'Денег нет, держись: твой долг - {remained_dict[currency]} {currency_dict[currency]}'
 
     def _today_cash_remained(remained, currency):
         if remained == 0:
