@@ -139,7 +139,9 @@ class TestCashCalculator:
         (1, 'usd'), (1, 'eur'), (1, 'rub'),
         (-1, 'usd'), (-1, 'eur'), (-1, 'rub')
     ])
-    def test_get_today_cash_remained(self, init_limit, data_records, amount, currency, today_cash_remained, msg_err):
+    def test_get_today_cash_remained(self, init_limit, data_records, amount, currency, today_cash_remained, msg_err,
+                                     monkeypatch):
+
         result = homework.CashCalculator(init_limit)
         assert hasattr(result, 'get_today_cash_remained'), \
             msg_err('add_method', 'get_today_cash_remained', 'CashCalculator')
@@ -149,7 +151,9 @@ class TestCashCalculator:
             result.add_record(record)
 
         result.EURO_RATE = 70
+        monkeypatch.setattr(homework.CashCalculator, "EURO_RATE", 70)
         result.USD_RATE = 60
+        monkeypatch.setattr(homework.CashCalculator, "USD_RATE", 60)
         result.limit = today + (amount * 300)
         assert result.get_today_cash_remained(currency) == today_cash_remained(amount, currency), \
             msg_err('wrong_method', 'get_today_cash_remained', 'CashCalculator')

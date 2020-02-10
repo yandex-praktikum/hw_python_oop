@@ -69,6 +69,6 @@ def today_cash_remained():
     remained_dict = {
         'usd': 5.0,
         'eur': 4.29,
-        'rub': 300
+        'rub': 300.0
     }
     return _today_cash_remained
