@@ -1,10 +1,10 @@
 import datetime as dt
 
+
 class Calculator:
     def __init__(self, limit):
         self.limit = limit
         self.records = []
-
 
     def add_record(self, record):
             self.records.append(record)
@@ -12,7 +12,7 @@ class Calculator:
     def get_today_stats(self):
         sum = 0
         for record in self.records:
-            if record.date == self.currentDate.date():
+            if record.date == self.currentDate.date(): #тесты запускались но писали ошибки, честно говоря не очень понятно что надо написать 
                 sum += record.amount
         return sum
 
@@ -28,7 +28,7 @@ class Calculator:
 class Record:
     def __init__(self, amount, comment, date):
         self.amount = amount
-        self.date = dt.datetime.strptime(date, date_format).date()
+        self.date = dt.datetime.strptime(date, date_format).date() #полагал что этого будет достаточно, быстро как испровить пока не знаю ушел гуглить
         self.comment = comment
 
 
