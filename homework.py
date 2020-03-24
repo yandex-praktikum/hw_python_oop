@@ -28,7 +28,7 @@ class Calculator:
 class Record:
     def __init__(self, amount, comment, date):
         self.amount = amount
-        self.date = dt.datetime.strptime(date, date_format).date() #полагал что этого будет достаточно, быстро как испровить пока не знаю ушел гуглить
+        self.date = dt.datetime.strptime(date).date() #полагал что этого будет достаточно, быстро как испровить пока не знаю ушел гуглить
         self.comment = comment
 
 
