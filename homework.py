@@ -26,10 +26,13 @@ class Calculator:
         return sum
 
 class Record:
-    def __init__(self, amount, comment, date):
+    def __init__(self, amount, comment, date=None):
         self.amount = amount
-        self.date = dt.datetime.strptime(date).date() #полагал что этого будет достаточно, быстро как испровить пока не знаю ушел гуглить
         self.comment = comment
+        if date is None:
+            self.date = dt.date.today()
+        else:
+            self.date = dt.datetime.strptime(date, '%d.%m.%yY').date()
 
 
 class CaloriesCalculator(Calculator):
