@@ -37,13 +37,13 @@ class CaloriesCalculator(Calculator):
         self.calories_remain = self.limit - self.get_today_stats()
 
         if self.limit > self.get_today_stats():
-            return f"Сегодня можно съесть что-нибудь ещё, но с общей калорийностью не более {self.calories_remain} кКал"
+            return f"Сегодня можно съесть что-нибудь ещё, но c общей калорийностью не более {self.calories_remain} кКал"
         return f"Хватит есть!"
 
 
 class CashCalculator(Calculator):
-    USD_RATE = 61.87
-    EURO_RATE = 68.62
+    USD_RATE = 78.87я вроде открывал в другом месте
+    EURO_RATE = 82.62
 
     def get_today_cash_remained(self, currency):
         self.currency = currency
