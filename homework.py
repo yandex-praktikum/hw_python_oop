@@ -1,67 +1,68 @@
 import datetime as dt
 
-today = dt.date.today()
 
 class Calculator:
     def __init__(self, limit):
-        self.limit = int(limit)
+        self.limit = limit
         self.records = []
-        
+
     def add_record(self, record):
-        self.records.append(record)
-        
+            self.records.append(record)
+
     def get_today_stats(self):
-        today_stats = 0
-        today_stats = sum([record.amount for record in self.records if record.date == today])
-        return today_stats
+        sum = 0
+        for record in self.records:
+            if record.date == self.currentDate.date(): #откуда берется такое свойство у класса калькулятор?
+                                                        #Запускались ли тесты? Почему выбран cameralCase для переменной это не по пеп-8
+                sum += record.amount
+        return sum
 
     def get_week_stats(self):
-        week_stats = 0
-        week_start_day = today - dt.timedelta(7)
-        week_stats = sum([record.amount for record in self.records if week_start_day <= record.date <= today])
-        return week_stats
-
+        sum = 0
+        delta = dt.timedelta(7)
+        week = self.currentDate.date() - delta
+        for record in self.records:
+            if (record.date > week and record.date <= self.currentDate.date()):
+                sum += record.amount
+        return sum
 
 class Record:
     def __init__(self, amount, comment, date=None):
-        self.amount = amount
+        self.amount = amount #при инициализации класса плохо считывать текущую дату, тк она меняется. Если скрипт больше суток будет работать, текущая дата будет уже ошибкой
         self.comment = comment
-        if date:
-            self.date = dt.datetime.strptime(date, '%d.%m.%Y').date()
+        if date is None:
+            self.date = dt.date.today()
         else:
-            self.date = today
+            self.date = dt.datetime.strptime(date, '%d.%m.%Yy').date()
 
 
 class CaloriesCalculator(Calculator):
     def get_calories_remained(self):
-        self.calories_remain = self.limit - self.get_today_stats()
-
-        if self.limit > self.get_today_stats():
-            return f"Сегодня можно съесть что-нибудь ещё, но с общей калорийностью не более {self.calories_remain} кКал"
-        return f"Хватит есть!"
-
+        if (self.limit > self.get_today_stats()):
+            balance = self.limit - self.get_today_stats()
+            return(f'Сегодня можно съесть что-нибудь ещё, но с общей калорийностью не более {balance} кКал')
+        else:
+            return('Хватит есть!')
 
 class CashCalculator(Calculator):
-    USD_RATE = 77.87
-    EURO_RATE = 83.62
+    USD_RATE = 62.07
+    EURO_RATE = 69.40
 
     def get_today_cash_remained(self, currency):
-        self.currency = currency
-        self.currency_values = {
-            "rub": (1, "руб"),
-            "usd": (self.USD_RATE, "USD"),
-            "eur": (self.EURO_RATE, "Euro")
+        limit_today = self.limit
+        balance_today = self.get_today_stats()
+        balance = limit_today - balance_today
+        balance_usd = round(balance / self.USD_RATE, 2)
+        balance_euro = round(balance / self.EURO_RATE, 2)
+        balance_all_currency = {
+            "rub": (balance, "руб"),
+            "usd": (balance_usd, "USD"),
+            "eur": (balance_euro, "Euro")
         }
-        self.currency_rate, self.currency_abbr = self.currency_values[self.currency]
-        self.today_cash_remain = self.limit - self.get_today_stats()
+        balance_in_currency, value_currency = balance_all_currency[currency]
+        if balance_today == limit_today:
+            return "Денег нет, держись"
+        if balance_today < limit_today:
+            return f"На сегодня осталось {balance_in_currency} {value_currency}"
+        return f"Денег нет, держись: твой долг - {-balance_in_currency} {value_currency}"
 
-        if self.currency == "rub":
-            self.balance = self.today_cash_remain
-        else:
-            self.balance = round(self.today_cash_remain / self.currency_rate, 2)
-
-        if self.today_cash_remain > 0:
-            return f"На сегодня осталось {self.balance} {self.currency_abbr}"
-        elif self.today_cash_remain < 0:
-            return f"Денег нет, держись: твой долг - {abs(self.balance)} {self.currency_abbr}"
-        return f"Денег нет, держись"
