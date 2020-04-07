@@ -1,4 +1,5 @@
 import pytest
+import re
 from datetime import datetime
 
 try:
@@ -155,5 +156,5 @@ class TestCashCalculator:
         result.USD_RATE = 60
         monkeypatch.setattr(homework.CashCalculator, "USD_RATE", 60)
         result.limit = today + (amount * 300)
-        assert result.get_today_cash_remained(currency) == today_cash_remained(amount, currency), \
+        assert re.fullmatch(today_cash_remained(amount, currency), result.get_today_cash_remained(currency)), \
             msg_err('wrong_method', 'get_today_cash_remained', 'CashCalculator')
