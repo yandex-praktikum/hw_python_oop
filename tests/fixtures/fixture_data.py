@@ -16,15 +16,18 @@ def init_limit():
 @pytest.fixture
 def data_records():
     amount = 150
-    count = random.randint(20, 40)
+    count = random.randint(30, 40)
     today_count = random.randint(5, 10)
     week_count = random.randint(5, 10) + today_count
+    future_count = random.randint(5, 10)
     data = []
     for idx, _ in enumerate(range(count)):
         if idx < today_count:
             date = datetime.now()
         elif idx < week_count:
             date = datetime.now() - timedelta(days=random.randint(1, 6))
+        elif idx < future_count + week_count:
+            date = datetime.now() + timedelta(days=random.randint(1, 6))
         else:
             date = datetime(2019, 9, 1)
         data.append(homework.Record(amount=amount, comment=f'Test {idx}', date=date.strftime('%d.%m.%Y')))
