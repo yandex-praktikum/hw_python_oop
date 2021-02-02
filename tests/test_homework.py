@@ -1,6 +1,7 @@
-import pytest
 import re
 from datetime import datetime
+
+import pytest
 
 try:
     import homework

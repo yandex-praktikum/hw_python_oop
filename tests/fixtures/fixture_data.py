@@ -1,6 +1,7 @@
-import pytest
 import random
 from datetime import datetime, timedelta
+
+import pytest
 
 try:
     import homework
