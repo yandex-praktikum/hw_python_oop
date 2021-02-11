@@ -18,16 +18,18 @@ class TestRecord:
         assert hasattr(homework, 'Record'), msg_err('add_class', 'Record')
         result = homework.Record(**kwargs)
         assert hasattr(result, 'amount'), msg_err('add_attr', 'amount', 'Record')
-        assert result.amount == kwargs['amount'],  msg_err('wrong_attr', 'amount', 'Record')
+        assert result.amount == kwargs['amount'], msg_err('wrong_attr', 'amount', 'Record')
         assert hasattr(result, 'comment'), msg_err('add_attr', 'comment', 'Record')
-        assert result.comment == kwargs.get('comment', ''),  msg_err('wrong_attr', 'comment', 'Record')
+        assert result.comment == kwargs.get('comment', ''), msg_err('wrong_attr', 'comment', 'Record')
         assert hasattr(result, 'date'), msg_err('add_attr', 'date', 'Record')
         if 'date' in kwargs:
-            assert result.date == datetime.strptime(kwargs['date'], '%d.%m.%Y').date(), \
+            assert result.date == datetime.strptime(kwargs['date'], '%d.%m.%Y').date(), (
                 msg_err('wrong_attr', 'date', 'Record', ', свойство должно быть датой')
+            )
         else:
-            assert result.date == datetime.now().date(), \
+            assert result.date == datetime.now().date(), (
                 msg_err('wrong_attr', 'date', 'Record', ', свойство должно быть датой')
+            )
 
         assert not hasattr(result, 'USD_RATE'), msg_err('dont_create_attr', 'USD_RATE', 'Record')
         assert not hasattr(result, 'EURO_RATE'), msg_err('dont_create_attr', 'EURO_RATE', 'Record')
@@ -39,9 +41,9 @@ class TestCalculator:
         assert hasattr(homework, 'Calculator'), msg_err('add_class', 'Calculator')
         result = homework.Calculator(init_limit)
         assert hasattr(result, 'limit'), msg_err('add_attr', 'limit', 'Calculator')
-        assert result.limit == init_limit,  msg_err('wrong_attr', 'limit', 'Calculator')
+        assert result.limit == init_limit, msg_err('wrong_attr', 'limit', 'Calculator')
         assert hasattr(result, 'records'), msg_err('add_attr', 'records', 'Calculator')
-        assert result.records == [],  msg_err('wrong_attr', 'records', 'Calculator')
+        assert result.records == [], msg_err('wrong_attr', 'records', 'Calculator')
 
         assert not hasattr(result, 'USD_RATE'), msg_err('dont_create_attr', 'USD_RATE', 'Calculator')
         assert not hasattr(result, 'EURO_RATE'), msg_err('dont_create_attr', 'EURO_RATE', 'Calculator')
@@ -52,7 +54,7 @@ class TestCalculator:
         records, today, week = data_records
         for record in records:
             result.add_record(record)
-        assert result.records == records,  msg_err('wrong_attr', 'records', 'Calculator')
+        assert result.records == records, msg_err('wrong_attr', 'records', 'Calculator')
 
     def test_get_today_stats(self, init_limit, data_records, msg_err):
         result = homework.Calculator(init_limit)
@@ -72,20 +74,23 @@ class TestCalculator:
 
     def test_get_calories_remained(self, init_limit, msg_err):
         result = homework.Calculator(init_limit)
-        assert not hasattr(result, 'get_calories_remained'), \
+        assert not hasattr(result, 'get_calories_remained'), (
             msg_err('dont_create_method', 'get_calories_remained', 'Calculator')
+        )
 
     def test_get_today_cash_remained(self, init_limit, msg_err):
         result = homework.Calculator(init_limit)
-        assert not hasattr(result, 'get_today_cash_remained'), \
+        assert not hasattr(result, 'get_today_cash_remained'), (
             msg_err('dont_create_method', 'get_today_cash_remained', 'Calculator')
+        )
 
 
 class TestCaloriesCalculator:
 
     def test_init(self, init_limit, msg_err):
-        assert hasattr(homework, 'CaloriesCalculator'), \
+        assert hasattr(homework, 'CaloriesCalculator'), (
             msg_err('add_class', 'CaloriesCalculator', child=True, parent_name='Calculator')
+        )
         result = homework.CaloriesCalculator(init_limit)
         assert hasattr(result, 'limit'), msg_err('child_method', 'CaloriesCalculator', 'Calculator')
         assert result.limit == init_limit, msg_err('child_method', 'CaloriesCalculator', 'Calculator')
@@ -96,32 +101,38 @@ class TestCaloriesCalculator:
     def test_get_calories_remained(self, init_limit, data_records,
                                    negative_calories_remained, positive_calories_remained, msg_err):
         result = homework.CaloriesCalculator(init_limit)
-        assert hasattr(result, 'get_calories_remained'), \
+        assert hasattr(result, 'get_calories_remained'), (
             msg_err('add_method', 'get_calories_remained', 'CaloriesCalculator')
+        )
 
         records, today, week = data_records
         for record in records:
             result.add_record(record)
 
         if today < init_limit:
-            assert result.get_calories_remained() == positive_calories_remained(init_limit - today), \
+            assert result.get_calories_remained() == positive_calories_remained(init_limit - today), (
                 msg_err('wrong_method', 'get_calories_remained', 'CaloriesCalculator')
+            )
             result.limit = today - 200
-            assert result.get_calories_remained() == negative_calories_remained, \
+            assert result.get_calories_remained() == negative_calories_remained, (
                 msg_err('wrong_method', 'get_calories_remained', 'CaloriesCalculator')
+            )
         else:
-            assert result.get_calories_remained() == negative_calories_remained, \
+            assert result.get_calories_remained() == negative_calories_remained, (
                 msg_err('wrong_method', 'get_calories_remained', 'CaloriesCalculator')
+            )
             result.limit = today + 200
-            assert result.get_calories_remained() == positive_calories_remained(init_limit - today), \
+            assert result.get_calories_remained() == positive_calories_remained(init_limit - today), (
                 msg_err('wrong_method', 'get_calories_remained', 'CaloriesCalculator')
+            )
 
 
 class TestCashCalculator:
 
     def test_init(self, init_limit, msg_err):
-        assert hasattr(homework, 'CashCalculator'), \
+        assert hasattr(homework, 'CashCalculator'), (
             msg_err('add_class', 'CashCalculator', child=True, parent_name='Calculator')
+        )
         result = homework.CashCalculator(init_limit)
         assert hasattr(result, 'limit'), msg_err('child_method', 'CashCalculator', 'Calculator')
         assert result.limit == init_limit, msg_err('child_method', 'CashCalculator', 'Calculator')
@@ -143,10 +154,10 @@ class TestCashCalculator:
     ])
     def test_get_today_cash_remained(self, init_limit, data_records, amount, currency, today_cash_remained, msg_err,
                                      monkeypatch):
-
         result = homework.CashCalculator(init_limit)
-        assert hasattr(result, 'get_today_cash_remained'), \
+        assert hasattr(result, 'get_today_cash_remained'), (
             msg_err('add_method', 'get_today_cash_remained', 'CashCalculator')
+        )
 
         records, today, week = data_records
         for record in records:
@@ -157,5 +168,6 @@ class TestCashCalculator:
         result.USD_RATE = 60
         monkeypatch.setattr(homework.CashCalculator, "USD_RATE", 60)
         result.limit = today + (amount * 300)
-        assert re.fullmatch(today_cash_remained(amount, currency), result.get_today_cash_remained(currency)), \
+        assert re.fullmatch(today_cash_remained(amount, currency), result.get_today_cash_remained(currency)), (
             msg_err('wrong_method', 'get_today_cash_remained', 'CashCalculator')
+        )
