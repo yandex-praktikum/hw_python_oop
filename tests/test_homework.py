@@ -1,4 +1,6 @@
 import re
+import inspect
+from typing import Optional
 from datetime import datetime
 
 import pytest
@@ -23,6 +25,19 @@ class TestRecord:
         assert result.comment == kwargs.get('comment', ''), msg_err('wrong_attr', 'comment', 'Record')
         assert hasattr(result, 'date'), msg_err('add_attr', 'date', 'Record')
         if 'date' in kwargs:
+            date_default_arg = inspect.Parameter(
+                'date',
+                inspect.Parameter.KEYWORD_ONLY,
+                default=None,
+                annotation=Optional[str],
+            )
+            assert (
+                str(inspect.signature(homework.Record).parameters['date'])
+                == str(date_default_arg)
+            ), (
+                'В качестве дефолтного аргумента для даты '
+                'не должно быть посчитанное значение или пустая строка'
+            )
             assert result.date == datetime.strptime(kwargs['date'], '%d.%m.%Y').date(), (
                 msg_err('wrong_attr', 'date', 'Record', ', свойство должно быть датой')
             )
