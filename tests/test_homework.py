@@ -1,4 +1,5 @@
 import re
+import inspect
 from datetime import datetime
 
 import pytest
@@ -71,6 +72,7 @@ class TestCalculator:
             result.add_record(record)
         assert hasattr(result, 'get_week_stats'), msg_err('add_method', 'get_week_stats', 'Calculator')
         assert result.get_week_stats() == week, msg_err('wrong_method', 'get_week_stats', 'Calculator')
+        assert 'days=7' in inspect.getsource(result.get_week_stats), 'Необходимо считать сколько денег потрачено за последние 7 дней'
 
     def test_get_calories_remained(self, init_limit, msg_err):
         result = homework.Calculator(init_limit)
