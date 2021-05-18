@@ -25,16 +25,25 @@ class TestRecord:
         assert result.comment == kwargs.get('comment', ''), msg_err('wrong_attr', 'comment', 'Record')
         assert hasattr(result, 'date'), msg_err('add_attr', 'date', 'Record')
         if 'date' in kwargs:
-            date_default_arg = inspect.Parameter(
+            date_default_annotation_arg = inspect.Parameter(
                 'date',
                 inspect.Parameter.KEYWORD_ONLY,
                 default=None,
                 annotation=Optional[str],
             )
+            date_default_arg = inspect.Parameter(
+                'date',
+                inspect.Parameter.KEYWORD_ONLY,
+                default=None,
+            )
+            inspect_signature = str(inspect.signature(homework.Record).parameters['date'])
             assert (
-                str(inspect.signature(homework.Record).parameters['date'])
+                inspect_signature
+                == str(date_default_annotation_arg)
+                or
+                inspect_signature
                 == str(date_default_arg)
-            ), (
+            ) , (
                 'В качестве дефолтного аргумента для даты '
                 'не должно быть посчитанное значение или пустая строка'
             )
