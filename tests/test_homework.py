@@ -96,9 +96,12 @@ class TestCalculator:
         assert hasattr(result, 'get_week_stats'), msg_err('add_method', 'get_week_stats', 'Calculator')
         assert result.get_week_stats() == week, msg_err('wrong_method', 'get_week_stats', 'Calculator')
         get_week_stats_inspect = inspect.getsource(result.get_week_stats)
+        get_week_stats_inspect_in_class = inspect.getsource(homework.Calculator)
         assert (
             'days=7' in get_week_stats_inspect or
-            'weeks=1' in get_week_stats_inspect
+            'weeks=1' in get_week_stats_inspect or
+            'days=7' in get_week_stats_inspect_in_class or
+            'weeks=1' in get_week_stats_inspect_in_class
         ), 'Необходимо считать сколько денег потрачено за последние 7 дней'
 
     def test_get_calories_remained(self, init_limit, msg_err):
