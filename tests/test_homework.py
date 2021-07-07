@@ -28,8 +28,8 @@ class TestRecord:
             date_default_annotation_arg = inspect.Parameter(
                 'date',
                 inspect.Parameter.KEYWORD_ONLY,
+                annotation='Optional[str]',
                 default=None,
-                annotation=Optional[str],
             )
             date_default_arg = inspect.Parameter(
                 'date',
