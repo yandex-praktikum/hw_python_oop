@@ -76,3 +76,19 @@ def today_cash_remained():
         'rub': '300(.0|.00|)'
     }
     return _today_cash_remained
+
+
+@pytest.fixture
+def fixture_CashCalculator(init_limit, monkeypatch):
+    result = homework.CashCalculator(init_limit)
+    if hasattr(homework.CashCalculator, 'currencies'):
+        monkeypatch.setattr(homework.CashCalculator, "currencies", {
+            'eur': ('Euro', 70),
+            'usd': ('USD', 60),
+            'rub': ('руб', 1),
+        })
+    else:
+        monkeypatch.setattr(homework.CashCalculator, "EURO_RATE", 70)
+        monkeypatch.setattr(homework.CashCalculator, "USD_RATE", 60)
+    return result
+
