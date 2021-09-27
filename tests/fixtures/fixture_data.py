@@ -87,8 +87,13 @@ def fixture_CashCalculator(init_limit, monkeypatch):
             'usd': ('USD', 60),
             'rub': ('руб', 1),
         })
+    elif hasattr(homework.CashCalculator, 'CURRENCIES'):
+        monkeypatch.setattr(homework.CashCalculator, "CURRENCIES", {
+            'eur': ('Euro', 70),
+            'usd': ('USD', 60),
+            'rub': ('руб', 1),
+        })
     else:
         monkeypatch.setattr(homework.CashCalculator, "EURO_RATE", 70)
         monkeypatch.setattr(homework.CashCalculator, "USD_RATE", 60)
     return result
-
