@@ -55,27 +55,27 @@ def test_InfoMessage():
 
 
 @pytest.mark.parametrize('input_data, expected', [
-    (['Swimming', 1, 75, 1, 80], [
+    (['Swimming', 1, 75, 1, 80],
         'Тип тренировки: Swimming; '
         'Длительность: 1.000 ч.; '
         'Дистанция: 75.000 км; '
         'Ср. скорость: 1.000 км/ч; '
         'Потрачено ккал: 80.000.'
-    ]),
-    (['Running', 4, 20, 4, 20], [
+     ),
+    (['Running', 4, 20, 4, 20],
         'Тип тренировки: Running; '
         'Длительность: 4.000 ч.; '
         'Дистанция: 20.000 км; '
         'Ср. скорость: 4.000 км/ч; '
         'Потрачено ккал: 20.000.'
-    ]),
-    (['SportsWalking', 12, 6, 12, 6], [
+     ),
+    (['SportsWalking', 12, 6, 12, 6],
         'Тип тренировки: SportsWalking; '
         'Длительность: 12.000 ч.; '
         'Дистанция: 6.000 км; '
         'Ср. скорость: 12.000 км/ч; '
         'Потрачено ккал: 6.000.'
-    ]),
+     ),
 ])
 def test_InfoMessage_get_message(input_data, expected):
     info_message = homework.InfoMessage(*input_data)
@@ -85,10 +85,13 @@ def test_InfoMessage_get_message(input_data, expected):
     assert hasattr(info_message, 'get_message'), (
         'Создайте метод `get_message` в классе `InfoMessage`.'
     )
-    with Capturing() as get_message_output:
-        info_message.get_message()
-    assert get_message_output == expected, (
-        'Метод `get_message` класса `InfoMessage` должен печатать результат.\n'
+    result = info_message.get_message()
+    assert isinstance(result, str), (
+        'Метод `get_message` в классе `InfoMessage`'
+        'должен возвращать значение типа `str`'
+    )
+    assert result == expected, (
+        'Метод `get_message` класса `InfoMessage` должен возвращать строку.\n'
         'Например: \n'
         'Тип тренировки: Swimming; '
         'Длительность: 1.000 ч.; '
@@ -209,7 +212,7 @@ def test_Swimming():
     swimming = homework.Swimming
     swimming_signature = inspect.signature(swimming)
     swimming_signature_list = list(swimming_signature.parameters)
-    for param in ['action', 'duration', 'weight', 'length', 'count']:
+    for param in ['action', 'duration', 'weight', 'length_pool', 'count_pool']:
         assert param in swimming_signature_list, (
             'У метода `__init__` класса `Swimming` '
             f' должен быть параметр {param}.'
