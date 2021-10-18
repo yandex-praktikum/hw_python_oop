@@ -1,7 +1,6 @@
 import pytest
 import types
 import inspect
-from conftest import Capturing
 
 try:
     import homework
