@@ -47,10 +47,10 @@ def test_InfoMessage():
     info_message = homework.InfoMessage
     info_message_signature = inspect.signature(info_message)
     info_message_signature_list = list(info_message_signature.parameters)
-    for param in ['training_type', 'duration', 'distance', 'speed', 'calories']:
-        assert param in info_message_signature_list, (
+    for p in ['training_type', 'duration', 'distance', 'speed', 'calories']:
+        assert p in info_message_signature_list, (
             'У метода `__init__` класса `InfoMessage` должен быть '
-            f'параметр {param}.'
+            f'параметр {p}.'
         )
 
 
@@ -180,7 +180,9 @@ def test_Training_get_spent_calories(input_data):
     assert hasattr(training, 'get_spent_calories'), (
         'Создайте метод `get_spent_calories` в классе `Training`.'
     )
-    assert callable(training.get_spent_calories), '`get_spent_calories` должна быть функцией.'
+    assert callable(training.get_spent_calories), (
+        '`get_spent_calories` должна быть функцией.'
+    )
 
 
 def test_Training_show_training_info(monkeypatch):
@@ -205,7 +207,9 @@ def test_Training_show_training_info(monkeypatch):
 
 def test_Swimming():
     assert hasattr(homework, 'Swimming'), 'Создайте класс `Swimming`'
-    assert inspect.isclass(homework.Swimming), '`Swimming` должен быть классом.'
+    assert inspect.isclass(homework.Swimming), (
+        '`Swimming` должен быть классом.'
+    )
     assert issubclass(homework.Swimming, homework.Training), (
         'Класс `Swimming` должен наследоваться от класса `Training`.'
     )
@@ -299,7 +303,8 @@ def test_SportsWalking_get_spent_calories(input_data, expected):
         'должен возвращать значение типа`float`'
     )
     assert result == expected, (
-        'Проверьте формулу подсчёта потраченных калорий в классе `SportsWalking`'
+        'Проверьте формулу подсчёта потраченных '
+        'калорий в классе `SportsWalking`'
     )
 
 
