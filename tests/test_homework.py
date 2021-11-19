@@ -140,7 +140,7 @@ def test_Training_get_distance(input_data, expected):
         'Создайте метод `get_distance` в классе `Training`.'
     )
     result = training.get_distance()
-    assert type(result) == float, (
+    assert isinstance(result, float), (
         'Метод `get_distance` в классе `Trainig`'
         'должен возвращать значение типа `float`'
     )
@@ -160,7 +160,7 @@ def test_Training_get_mean_speed(input_data, expected):
         'Создайте метод `get_mean_speed` в классе `Training`.'
     )
     result = training.get_mean_speed()
-    assert type(result) == float, (
+    assert isinstance(result, float), (
         'Метод `get_mean_speed` в классе `Training`'
         'должен возвращать значение типа `float`'
     )
@@ -240,7 +240,7 @@ def test_Swimming_get_mean(input_data, expected):
         'Создайте метод `get_mean_speed` в классе `Swimming`.'
     )
     result = swimming.get_mean_speed()
-    assert type(result) == float, (
+    assert isinstance(result, float), (
         'Метод `get_mean_speed` в классе `Swimming` '
         'должен возвращать значение типа `float`'
     )
@@ -260,7 +260,7 @@ def test_Swimming_get_spent_calories(input_data, expected):
         'Создайте метод `get_spent_calories` в классе `Swimming`.'
     )
     result = swimming.get_spent_calories()
-    assert type(result) == float, (
+    assert isinstance(result, float), (
         'Метод `get_spent_calories` класса `Swimming` '
         'должен возвращать значение типа `float`'
     )
@@ -298,7 +298,7 @@ def test_SportsWalking_get_spent_calories(input_data, expected):
         'Создайте метод `get_spent_calories` в классе `SportsWalking`.'
     )
     result = sports_walking.get_spent_calories()
-    assert type(result) == float, (
+    assert isinstance(result, float), (
         'Метод `get_spent_calories`класса `SportsWalking` '
         'должен возвращать значение типа`float`'
     )
@@ -335,7 +335,7 @@ def test_Running_get_spent_calories(input_data, expected):
         'Создайте метод `get_spent_calories` в классе `Running`.'
     )
     result = running.get_spent_calories()
-    assert type(result) == float, (
+    assert isinstance(result, float), (
         'Метод `get_spent_calories` класса `Running` '
         'должен возвращать значение типа `float`'
     )
