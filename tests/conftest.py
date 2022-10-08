@@ -25,3 +25,7 @@ class Capturing(list):
         self.extend(self._stringio.getvalue().splitlines())
         del self._stringio
         sys.stdout = self._stdout
+
+
+def pytest_make_parametrize_id(config, val):
+    return repr(val)
