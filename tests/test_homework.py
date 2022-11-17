@@ -106,13 +106,17 @@ def test_Training():
     assert inspect.isclass(homework.Training), (
         '`Training` должен быть классом.'
     )
-    for attr, value in {'LEN_STEP': 0.65, 'M_IN_KM': 1000, 'MIN_IN_H': 60}.items():
+    for attr, value in {
+            'LEN_STEP': 0.65,
+            'M_IN_KM': 1000,
+            'MIN_IN_H': 60
+    }.items():
         assert hasattr(homework.Training, attr), (
-            f'У класса `Training` должен быть атрибут `{attr}`'
+            f'У класса `Training` должна быть константа `{attr}`'
         )
         assert getattr(homework.Training, attr) == value, (
-            'У класса `Training` должен быть '
-            f'атрибут `{attr}` со значением `{value}`'
+            'У класса `Training` должна быть '
+            f'константа `{attr}` со значением `{value}`'
         )
     training = homework.Training
     training_signature = inspect.signature(training)
@@ -123,13 +127,13 @@ def test_Training():
             f' параметр {param}.'
         )
     assert 'LEN_STEP' in list(training.__dict__), (
-        'Задайте атрибут `LEN_STEP` в классе `Training`'
+        'Задайте константу `LEN_STEP` в классе `Training`'
     )
     assert training.LEN_STEP == 0.65, (
         'Длина шага в классе `Training` должна быть равна 0.65'
     )
     assert 'M_IN_KM' in list(training.__dict__), (
-        'Задайте атрибут `M_IN_KM` в классе `Training`'
+        'Задайте константу `M_IN_KM` в классе `Training`'
     )
     assert training.M_IN_KM == 1000, (
         'В классе `Training` укажите правильное '
@@ -191,11 +195,6 @@ def test_Training_get_spent_calories(input_data):
     assert callable(training.get_spent_calories), (
         '`get_spent_calories` должна быть функцией.'
     )
-    assert training.get_spent_calories() is None, (
-        'Метод `get_spent_calories` класса `Training` не должен '
-        'высчитывать потреченные калории, так как для каждого типа '
-        'тренировки своя формула подсчета калорий.'
-    )
 
 
 def test_Training_show_training_info(monkeypatch):
@@ -226,18 +225,16 @@ def test_Swimming():
     assert issubclass(homework.Swimming, homework.Training), (
         'Класс `Swimming` должен наследоваться от класса `Training`.'
     )
-    for attr, value in {
-            'LEN_STEP': 1.38,
+    Swimming_attr_values = homework.Swimming.__dict__.values()
+    for _, value in {
             'CALORIES_MEAN_SPEED_SHIFT': 1.1,
             'CALORIES_WEIGHT_MULTIPLIER': 2,
     }.items():
-        assert hasattr(homework.Swimming, attr), (
-            f'У класса `Swimming` должен быть атрибут `{attr}`'
+        assert value in Swimming_attr_values, (
+            'У класса `Swimming` должна быть '
+            f'константа со значением `{value}`'
         )
-        assert getattr(homework.Swimming, attr) == value, (
-            'У класса `Swimming` должен быть '
-            f'атрибут `{attr}` со значением `{value}`'
-        )
+
     swimming = homework.Swimming
     swimming_signature = inspect.signature(swimming)
     swimming_signature_list = list(swimming_signature.parameters)
@@ -247,7 +244,7 @@ def test_Swimming():
             f' должен быть параметр {param}.'
         )
     assert 'LEN_STEP' in list(swimming.__dict__), (
-        'Задайте атрибут `LEN_STEP` в классе `Swimming`'
+        'Задайте константу `LEN_STEP` в классе `Swimming`'
     )
     assert swimming.LEN_STEP == 1.38, (
         'Длина гребка в классе `Swimming` должна быть равна 1.38'
@@ -270,12 +267,12 @@ def test_Swimming_get_mean(input_data, expected):
 
 @pytest.mark.parametrize('input_data, expected', [
     ([720, 1, 80, 25, 40], 336.0),
-    ([420, 4, 20, 42, 4], 182.72000000000003),
+    ([420, 4, 20, 42, 4], 182.72),
     ([1206, 12, 6, 12, 6], 159.264),
 ])
 def test_Swimming_get_spent_calories(input_data, expected):
     swimming = homework.Swimming(*input_data)
-    result = swimming.get_spent_calories()
+    result = round(swimming.get_spent_calories(), 3)
     assert type(result) == float, (
         'Переопределите метод `get_spent_calories` в классе `Swimming`.'
     )
@@ -299,11 +296,11 @@ def test_SportsWalking():
             'CM_IN_M': 100
     }.items():
         assert hasattr(homework.SportsWalking, attr), (
-            f'У класса `SportsWalking` должен быть атрибут `{attr}`'
+            f'У класса `SportsWalking` должна быть константа `{attr}`'
         )
-        assert getattr(homework.SportsWalking, attr) == value, (
-            'У класса `SportsWalking` должен быть '
-            f'атрибут `{attr}` со значением `{value}`'
+        assert round(getattr(homework.SportsWalking, attr), 3) == value, (
+            'У класса `SportsWalking` дожна быть '
+            f'константа `{attr}` со значением `{value}`'
         )
     sports_walking = homework.SportsWalking
     sports_walking_signature = inspect.signature(sports_walking)
@@ -316,13 +313,13 @@ def test_SportsWalking():
 
 
 @pytest.mark.parametrize('input_data, expected', [
-    ([9000, 1, 75, 180], 349.2517475250001),
-    ([420, 4, 20, 42], 168.11931219846002),
-    ([1206, 12, 6, 12], 151.54430943785593),
+    ([9000, 1, 75, 180], 349.252),
+    ([420, 4, 20, 42], 168.119),
+    ([1206, 12, 6, 12], 151.544),
 ])
 def test_SportsWalking_get_spent_calories(input_data, expected):
     sports_walking = homework.SportsWalking(*input_data)
-    result = sports_walking.get_spent_calories()
+    result = round(sports_walking.get_spent_calories(), 3)
     assert type(result) == float, (
         'Переопределите метод `get_spent_calories` в классе `SportsWalking`.'
     )
@@ -338,27 +335,28 @@ def test_Running():
     assert issubclass(homework.Running, homework.Training), (
         'Класс `Running` должен наследоваться от класса `Training`.'
     )
-    for attr, value in {'CALORIES_MEAN_SPEED_MULTIPLIER': 18, 'CALORIES_MEAN_SPEED_SHIFT': 1.79}.items():
-        assert hasattr(homework.Running, attr), (
-            f'У класса `Running` должен быть атрибут `{attr}`'
-        )
-        assert getattr(homework.Running, attr) == value, (
-            'У класса `Running` должен быть '
-            f'атрибут `{attr}` со значением `{value}`'
+    Running_attr_values = homework.Running.__dict__.values()
+    for _, value in {
+            'CALORIES_MEAN_SPEED_MULTIPLIER': 18,
+            'CALORIES_MEAN_SPEED_SHIFT': 1.79
+    }.items():
+        assert value in Running_attr_values, (
+            'У класса `Running` должна быть '
+            f'константа со значением `{value}`'
         )
 
 
 @pytest.mark.parametrize('input_data, expected', [
-    ([9000, 1, 75], 481.90500000000003),
-    ([420, 4, 20], 14.488800000000001),
-    ([1206, 12, 6], 12.812472),
+    ([9000, 1, 75], 481.905),
+    ([420, 4, 20], 14.489),
+    ([1206, 12, 6], 12.812),
 ])
 def test_Running_get_spent_calories(input_data, expected):
     running = homework.Running(*input_data)
     assert hasattr(running, 'get_spent_calories'), (
         'Создайте метод `get_spent_calories` в классе `Running`.'
     )
-    result = running.get_spent_calories()
+    result = round(running.get_spent_calories(), 3)
     assert type(result) == float, (
         'Переопределите метод `get_spent_calories` в классе `Running`.'
     )
