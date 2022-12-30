@@ -2,6 +2,7 @@ import re
 import pytest
 import types
 import inspect
+from collections import namedtuple
 from conftest import Capturing
 
 try:
@@ -13,6 +14,9 @@ except NameError as exc:
     assert False, f'Класс {name} не обнаружен в файле домашней работы.'
 except ImportError:
     assert False, 'Не найден файл с домашней работой `homework.py`'
+
+
+ValueInfo = namedtuple('ValueInfo', ('value', 'description'))
 
 
 def test_read_package():
@@ -106,18 +110,34 @@ def test_Training():
     assert inspect.isclass(homework.Training), (
         '`Training` должен быть классом.'
     )
-    for attr, value in {
-            'LEN_STEP': 0.65,
-            'M_IN_KM': 1000,
-            'MIN_IN_H': 60
+    for name, value in {
+            'LEN_STEP': ValueInfo(
+                0.65, 
+                (
+                    ', в которой будет храниться расстояние, которое '
+                    'спортсмен преодолевает за один шаг или гребок'
+                )
+            ),
+            'M_IN_KM': ValueInfo(
+                1000,
+                (
+                    ' для перевода значений из метров в километры'
+                )
+            )
     }.items():
-        assert hasattr(homework.Training, attr), (
-            f'У класса `Training` должна быть константа `{attr}`'
+        assert hasattr(homework.Training, name), (
+            f'У класса `Training` должна быть константа `{name}`'
+            f'{value.description}.'
         )
-        assert getattr(homework.Training, attr) == value, (
-            'У класса `Training` должна быть '
-            f'константа `{attr}` со значением `{value}`'
+        assert getattr(homework.Training, name) == value.value, (
+            f'Значение константы `{name}` в классе `Training` должно быть '
+            f'равно `{value.value}`.'
         )
+    MIN_IN_H = 60
+    assert MIN_IN_H in homework.Training.__dict__.values(), (
+        f'У класса `Training` должна быть константа для перевода часов в '
+        f'минуты со значением `{MIN_IN_H}`.'
+    )
     training = homework.Training
     training_signature = inspect.signature(training)
     training_signature_list = list(training_signature.parameters)
@@ -126,19 +146,6 @@ def test_Training():
             'У метода `__init__` класса `Training` должен быть '
             f' параметр {param}.'
         )
-    assert 'LEN_STEP' in list(training.__dict__), (
-        'Задайте константу `LEN_STEP` в классе `Training`'
-    )
-    assert training.LEN_STEP == 0.65, (
-        'Длина шага в классе `Training` должна быть равна 0.65'
-    )
-    assert 'M_IN_KM' in list(training.__dict__), (
-        'Задайте константу `M_IN_KM` в классе `Training`'
-    )
-    assert training.M_IN_KM == 1000, (
-        'В классе `Training` укажите правильное '
-        'количество метров в километре: 1000'
-    )
 
 
 @pytest.mark.parametrize('input_data, expected', [
@@ -226,13 +233,19 @@ def test_Swimming():
         'Класс `Swimming` должен наследоваться от класса `Training`.'
     )
     Swimming_attr_values = homework.Swimming.__dict__.values()
-    for _, value in {
-            'CALORIES_MEAN_SPEED_SHIFT': 1.1,
-            'CALORIES_WEIGHT_MULTIPLIER': 2,
-    }.items():
-        assert value in Swimming_attr_values, (
-            'У класса `Swimming` должна быть '
-            f'константа со значением `{value}`'
+    for value_info in {
+            'CALORIES_MEAN_SPEED_SHIFT': ValueInfo(
+                1.1,
+                (' для смещения значения средней скорости')
+            ),
+            'CALORIES_WEIGHT_MULTIPLIER': ValueInfo(
+                2,
+                ' для множителя скорости'
+            )
+    }.values():
+        assert value_info.value in Swimming_attr_values, (
+            f'У класса `Swimming` должна быть константа'
+            f'{value_info.description} со значением `{value_info.value}`.'
         )
 
     swimming = homework.Swimming
@@ -289,18 +302,31 @@ def test_SportsWalking():
     assert issubclass(homework.SportsWalking, homework.Training), (
         'Класс `SportsWalking` должен наследоваться от класса `Training`.'
     )
-    for attr, value in {
-            'CALORIES_WEIGHT_MULTIPLIER': 0.035,
-            'CALORIES_SPEED_HEIGHT_MULTIPLIER': 0.029,
-            'KMH_IN_MSEC': 0.278,
-            'CM_IN_M': 100
-    }.items():
-        assert hasattr(homework.SportsWalking, attr), (
-            f'У класса `SportsWalking` должна быть константа `{attr}`'
-        )
-        assert round(getattr(homework.SportsWalking, attr), 3) == value, (
-            'У класса `SportsWalking` дожна быть '
-            f'константа `{attr}` со значением `{value}`'
+    SportsWalking_attr_values = homework.SportsWalking.__dict__.values()
+    for value_info in {
+            'CALORIES_WEIGHT_MULTIPLIER': ValueInfo(
+                0.035,
+                ' для множителя веса спортсмена'
+            ),
+            'CALORIES_SPEED_HEIGHT_MULTIPLIER': ValueInfo(
+                0.029,
+                (
+                    ' для множителя частного квадрата средней скорости и '
+                    'роста спортсмена'
+                )
+            ),
+            'KMH_IN_MSEC': ValueInfo(
+                0.278,
+                ' для перевода значений из км/ч в м/с'
+            ),
+            'CM_IN_M': ValueInfo(
+                100,
+                ' для перевода значений из сантиметров в метры'
+            )
+    }.values():
+        assert value_info.value in SportsWalking_attr_values, (
+            'У класса `SportsWalking` должна быть константа'
+            f'{value_info.description} со значением `{value_info.value}`.'
         )
     sports_walking = homework.SportsWalking
     sports_walking_signature = inspect.signature(sports_walking)
@@ -336,13 +362,19 @@ def test_Running():
         'Класс `Running` должен наследоваться от класса `Training`.'
     )
     Running_attr_values = homework.Running.__dict__.values()
-    for _, value in {
-            'CALORIES_MEAN_SPEED_MULTIPLIER': 18,
-            'CALORIES_MEAN_SPEED_SHIFT': 1.79
-    }.items():
-        assert value in Running_attr_values, (
-            'У класса `Running` должна быть '
-            f'константа со значением `{value}`'
+    for value_info in {
+            'CALORIES_MEAN_SPEED_MULTIPLIER': ValueInfo(
+                18,
+                ' для множителя средней скорости'
+            ),
+            'CALORIES_MEAN_SPEED_SHIFT': ValueInfo(
+                1.79,
+                ' для сдвига средней скорости'
+            )
+    }.values():
+        assert value_info.value in Running_attr_values, (
+            f'У класса `Running` должна быть константа'
+            f'{value_info.description} со значением `{value_info.value}`.'
         )
 
 
